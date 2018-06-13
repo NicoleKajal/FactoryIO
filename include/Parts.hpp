@@ -14,7 +14,8 @@ enum Rotation {
 
 enum Direction {
     DIRECTION_RIGHT,
-    DIRECTION_LEFT
+    DIRECTION_LEFT,
+    DIRECTION_STRAIGHT
 };
 
 class OnOffPart {
@@ -139,20 +140,47 @@ private:
  * pivoted rollers.
  * Details:
  *     Wheel radius: 0.05 m
- *     Conveying speed: 2.5 m/s
- *     Normally centered
  *     Wheels stroke: 0.003 m
  */
 class PopUpWheelSorter {  
 public:    
-    void setRotation(Rotation rotation){
+    PopUpWheelSorter(Factory& factory, std::string name)
+    : m_rotateForward(name + " Forward", false), 
+      m_wheelsLeft(name + " Left", false), 
+      m_wheelsRight(name + " Right", false) {
+        factory.add(&m_rotateForward).add(&m_wheelsLeft).add(&m_wheelsRight);
     }
+    
+    void rotateWheels(bool on){
+        m_rotateForward.setValue(on);
+    }
+        
     void setDirection(Direction direction) {
+        switch (direction) {
+            case DIRECTION_RIGHT:
+                m_wheelsLeft.setValue(false);
+                m_wheelsRight.setValue(true);
+                break;
+            case DIRECTION_LEFT: 
+                m_wheelsLeft.setValue(true);
+                m_wheelsRight.setValue(false);
+                break;
+            default: 
+                m_wheelsLeft.setValue(false);
+                m_wheelsRight.setValue(false);
+                break;
+        }
     }
+private:
+    Actuator<bool> m_rotateForward;
+    Actuator<bool> m_wheelsLeft;
+    Actuator<bool> m_wheelsRight;
 };
 
 /**
- * Pneumatic pusher sorter equipped with two reed sensors indicating the front and back limits.
+ * Pneumatic pusher sorter equipped with two reed sensors indicating the front and ba
+ *     Conveying speed: 2.5 m/s
+ *     Normally centeredck limits.
  * It also includes a servo valve which can be used to set and measure the rod position.
  *   Details:
  *     Required configuration: Analog

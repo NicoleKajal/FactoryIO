@@ -102,7 +102,7 @@ public:
         factory.add(&m_sensor);
     }
 
-    inline bool beamInterrupted() {
+    inline bool beamDetected() {
         return m_sensor.getValue();
     }
 

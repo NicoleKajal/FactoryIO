@@ -5,6 +5,7 @@
 #include <string>
 #include "Actuator.hpp"
 #include "Factory.hpp"
+#include "Sensor.hpp"
 
 enum Rotation {
     ROTATION_OFF,
@@ -46,6 +47,7 @@ typedef OnOffPart AlarmSiren;
 
 typedef OnOffPart StopBlade;
 
+typedef OnOffPart DigitalRollerConveyor;
 
 class SpeedActuator {
 public:
@@ -82,15 +84,39 @@ typedef SpeedActuator RollerConveyor;
  */
 class ConveyorScale {
 public:
-    void setRotation(Rotation rotation) {
-        
-    }
-    float getWeight() {
-        return 0;    
+    ConveyorScale(Factory& factory, std::string name)
+    : m_rotateForward(name + " Forward", false), 
+      m_rotateBackward(name + " Backward", false), 
+      m_weightSensor(name + " Weight", 0.0) {
+        factory.add(&m_rotateForward).add(&m_rotateBackward).add(&m_weightSensor);
     }
     
-};
+    void setRotation(Rotation rotation) {
+        switch (rotation) {
+            case ROTATION_FORWARD:
+                m_rotateForward.setValue(true);
+                m_rotateBackward.setValue(false);
+                break;
+            case ROTATION_BACKWARD:
+                m_rotateForward.setValue(false);
+                m_rotateBackward.setValue(true);
+                break;
+            default: 
+                m_rotateForward.setValue(false);
+                m_rotateBackward.setValue(false);
+                break;         
+        }
+    }
 
+    float getWeight() {
+        return m_weightSensor.getValue();
+    }
+private:
+    Actuator<bool> m_rotateForward;
+    Actuator<bool> m_rotateBackward;
+    Sensor<float> m_weightSensor;
+    
+};
 
 /**
  * A 45º power face arm diverter, powered by a gearmotor. Equipped with a belt that helps to
@@ -189,13 +215,22 @@ private:
  *     Stroke: 0.9 m
  */
 class Pusher {
-public:    
-    void setPosition(float poisition) {
-        
+public: 
+    Pusher(Factory& factory, std::string name)
+    : m_speedActuator(name + " Speed", false), 
+      m_positionSensor(name + " Position", false) {
+        factory.add(&m_speedActuator).add(&m_positionSensor);
+    }
+    
+    void push(float speed) {
+        m_speedActuator.setValue(speed);
     }
     float getPosition() {
-        return 0; 
+        return m_positionSensor.getValue();
     }
+private:
+    Actuator<float> m_speedActuator;
+    Sensor<float> m_positionSensor;
 };
 
 /**
@@ -207,20 +242,35 @@ public:
  */
 class PositioningBar {
 public:
-    void setRaised(bool enabled) {
+    PositioningBar(Factory& factory, std::string name)
+    : m_clampActuator(name + " Clamp", false), 
+      m_raiseActuator(name + " Raise", false),
+      m_clampSensor(name + " Clamped", false), 
+      m_limitSensor(name + " Limit", false){
+        factory.add(&m_clampActuator).add(&m_raiseActuator).add(&m_clampSensor).add(&m_limitSensor);
     }
     
-    void clamp(bool enabled) {
-        
+    inline void setRaised(bool enabled) {
+        m_raiseActuator.setValue(enabled);
+    }
+    
+    inline void setClamp(bool enabled) {
+        m_clampActuator.setValue(enabled);
     }
 
-    bool raisedLoweredLimit() {
-        return false;
+    inline bool raisedLoweredLimit() const {
+        return m_limitSensor.getValue();
     }
     
-    bool clamped() {
-        return false;
+    inline bool clamped() const {
+        return m_clampSensor.getValue();
     }
+private:
+    Actuator<bool> m_clampActuator;
+    Actuator<bool> m_raiseActuator;
+    Sensor<bool> m_clampSensor;
+    Sensor<bool> m_limitSensor;
+    
 
 };
 #endif

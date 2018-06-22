@@ -24,7 +24,7 @@ public:
       void applyChanges();
       bool start();
       void handleNewSensorValues(std::string jsonString);
-      void waitForChange();
+      void waitForSensorChange();
     
 private:    
 
@@ -36,7 +36,6 @@ private:
     std::list<SensorDeserializer*>  m_sensorDeserializerList;
     std::mutex                      m_mutex;
     std::condition_variable         m_changeControl;
-    bool                            m_changed;
 };
 
 #endif

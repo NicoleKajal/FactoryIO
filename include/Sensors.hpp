@@ -10,20 +10,15 @@
  * Generic "Item Detected" sensor, which is used by the Capacitive Sensor, Diffuse Sensor, and the
  * Inductive Sensor.
  */
-class ItemDetectedSensor {
+class ItemDetectedSensor : public Sensor<bool> {
 public:
-
     ItemDetectedSensor(Factory& factory, std::string name)
-    : m_sensor(name, false) {
-        factory.add(&m_sensor);
+    : Sensor(factory, name, false) {
     }
 
     inline bool itemDetected() const {
-        return m_sensor.getValue();
+        return getValue();
     }
-
-private:
-    Sensor<bool> m_sensor;
 };
 
 /**
@@ -66,23 +61,20 @@ typedef ItemDetectedSensor InductiveSensor;
  * @param name
  */
 
-class LightArraySensor {
+class LightArraySensor : public Sensor<uint32_t> {
 public:
 
     LightArraySensor(Factory& factory, std::string name)
-    : m_sensor(name, false) {
-        factory.add(&m_sensor);
+    : Sensor(factory, name, false) {
     }
 
     inline uint32_t getArrayBitMask() const {
-        return m_sensor.getValue();
+        return getValue();
     }
 
     inline bool bitSet(uint32_t bitPosition) {
-        return ((m_sensor.getValue()) & (1 << bitPosition) == bitPosition);
+        return (getValue() & (1 << bitPosition) == bitPosition);
     }
-private:
-    Sensor<uint32_t> m_sensor;
 };
 
 /**
@@ -94,20 +86,16 @@ private:
  *      Detectable materials: solids
  *      Sensing range: 0 - 6 m
  */
-class RetroreflectiveSensor {
+class RetroreflectiveSensor : public Sensor<bool> {
 public:
 
     RetroreflectiveSensor(Factory& factory, std::string name)
-    : m_sensor(name, false) {
-        factory.add(&m_sensor);
+    : Sensor(factory, name, false) {
     }
 
     inline bool beamDetected() {
-        return m_sensor.getValue();
+        return getValue();
     }
-
-private:
-    Sensor<bool> m_sensor;
 };
 
 /**
@@ -132,20 +120,16 @@ enum VisionSensorItems {
  * @param factory
  * @param name
  */
-class VisionSensor {
+class VisionSensor : public Sensor<uint32_t> {
 public:
 
     VisionSensor(Factory& factory, std::string name)
-    : m_sensor(name, false) {
-        factory.add(&m_sensor);
+    : Sensor(factory, name, false) {
     }
 
     inline VisionSensorItems item() {
-        return static_cast<VisionSensorItems>(m_sensor.getValue());
+        return static_cast<VisionSensorItems>(getValue());
     }
-
-private:
-    Sensor<uint32_t> m_sensor;
 };
   
 #endif

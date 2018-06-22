@@ -27,6 +27,10 @@ public:
         factory.add(&m_actuator);
     }
 
+    inline bool getOn() const {
+       return m_actuator.getValue();
+    }
+
     inline void setOn(bool on) {
         m_actuator.setValue(on);
     }
@@ -87,8 +91,8 @@ public:
     ConveyorScale(Factory& factory, std::string name)
     : m_rotateForward(name + " Forward", false), 
       m_rotateBackward(name + " Backward", false), 
-      m_weightSensor(name + " Weight", 0.0) {
-        factory.add(&m_rotateForward).add(&m_rotateBackward).add(&m_weightSensor);
+      m_weightSensor(factory, name + " Weight", 0.0) {
+        factory.add(&m_rotateForward).add(&m_rotateBackward);
     }
     
     void setRotation(Rotation rotation) {
@@ -108,9 +112,9 @@ public:
         }
     }
 
-    float getWeight() {
-        return m_weightSensor.getValue();
-    }
+//    float getWeight() {
+//        return m_weightSensor.getValue();
+//    }
 private:
     Actuator<bool> m_rotateForward;
     Actuator<bool> m_rotateBackward;
@@ -218,16 +222,16 @@ class Pusher {
 public: 
     Pusher(Factory& factory, std::string name)
     : m_speedActuator(name + " Speed", false), 
-      m_positionSensor(name + " Position", false) {
-        factory.add(&m_speedActuator).add(&m_positionSensor);
+      m_positionSensor(factory, name + " Position", false) {
+        factory.add(&m_speedActuator);
     }
     
     void push(float speed) {
         m_speedActuator.setValue(speed);
     }
-    float getPosition() {
-        return m_positionSensor.getValue();
-    }
+ //   float getPosition() {
+ //       return m_positionSensor.getValue();
+ //   }
 private:
     Actuator<float> m_speedActuator;
     Sensor<float> m_positionSensor;
@@ -240,14 +244,15 @@ private:
  *     Vertical stroke: 0.373 m
  *     Clamper stroke: 0.48 m
  */
+#if 0
 class PositioningBar {
 public:
     PositioningBar(Factory& factory, std::string name)
     : m_clampActuator(name + " Clamp", false), 
       m_raiseActuator(name + " Raise", false),
       m_clampSensor(name + " Clamped", false), 
-      m_limitSensor(name + " Limit", false){
-        factory.add(&m_clampActuator).add(&m_raiseActuator).add(&m_clampSensor).add(&m_limitSensor);
+      m_limitSensor(factory, name + " Limit", false) {
+        factory.add(&m_clampActuator).add(&m_raiseActuator).add(&m_clampSensor);
     }
     
     inline void setRaised(bool enabled) {
@@ -258,13 +263,13 @@ public:
         m_clampActuator.setValue(enabled);
     }
 
-    inline bool raisedLoweredLimit() const {
-        return m_limitSensor.getValue();
-    }
+//    inline bool raisedLoweredLimit() const {
+//        return m_limitSensor.getValue();
+//    }
     
-    inline bool clamped() const {
-        return m_clampSensor.getValue();
-    }
+//    inline bool clamped() const {
+//        return m_clampSensor.getValue();
+//    }
 private:
     Actuator<bool> m_clampActuator;
     Actuator<bool> m_raiseActuator;
@@ -273,5 +278,7 @@ private:
     
 
 };
+#endif
+
 #endif
 

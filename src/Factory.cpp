@@ -30,8 +30,7 @@ public:
 
 Factory::Factory() 
     : m_communications(new FactoryCommunicationsEventHandler(this)),
-      m_actuatorSerializerList(), m_sensorDeserializerList(), m_mutex(), 
-      m_changeControl(), m_changed(false) {
+      m_actuatorSerializerList(), m_sensorDeserializerList(), m_mutex() { 
 }
 
 bool Factory::start() {
@@ -63,21 +62,18 @@ void Factory::applyChanges() {
 
     m_communications.sendMessage(buffer.GetString());
 }
-
 void Factory::handleNewSensorValues(std::string jsonString) {
     std::lock_guard<std::mutex> scopedLock(m_mutex);
     rapidjson::Document jsonDocument;
     jsonDocument.Parse(jsonString.c_str());
     for (SensorDeserializer* sensorDeserializer : m_sensorDeserializerList) {
         if (sensorDeserializer->deserialize(jsonDocument)) {
-            m_changed = true;
             m_changeControl.notify_all();
         }
     }
 }
 
-void Factory::waitForChange() {
+void Factory::waitForSensorChange() {
     std::unique_lock<std::mutex> scopedLock(m_mutex);
-    m_changeControl.wait(scopedLock, [this] {return m_changed;});
-    m_changed = false;
+    m_changeControl.wait(scopedLock);
 }

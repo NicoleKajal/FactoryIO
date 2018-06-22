@@ -4,7 +4,9 @@
 
 #include <mutex>
 #include <string>
+#include <condition_variable>
 #include "rapidjson/document.h"
+#include "Factory.hpp"
 #include "SensorDeserializer.hpp"
 
 /**
@@ -25,8 +27,9 @@ public:
      * @param name      Name of the sensor
      * @param value     Sensor's default value
      */
-    Sensor(std::string name, T value)
-    : m_name(name), m_value(value), m_mutex() {
+    Sensor(Factory& factory, std::string name, T value)
+    : m_name(name), m_value(value), m_changed(false), m_mutex(), m_changeControl() {
+        factory.add(this);
     }
 
     /**
@@ -39,6 +42,40 @@ public:
         return m_name;
     }
 
+    /**
+     * Sets the value of the sensor with a new value if the new value is specified in the JSON
+     * document.
+     * 
+     * @param jsonDocument  Contains new sensor values
+     * 
+     * @return true if the sensor received an update
+     */
+    virtual bool deserialize(const rapidjson::Document& jsonDocument) {
+        // If the document has a value for a sensor with this name and with the
+        // same type as the value, set the new value.
+        std::lock_guard<std::mutex> scopedLock(m_mutex);
+        if ((jsonDocument.HasMember(m_name.c_str())) && (jsonDocument[m_name.c_str()].Is<T>())) {
+            T value = jsonDocument[m_name.c_str()].Get<T>();
+            if (value != m_value) {
+                m_value = value;
+                m_changed = true;
+                m_changeControl.notify_all();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void waitForChange() {
+        std::unique_lock<std::mutex> scopedLock(m_mutex);
+        if (!m_changed) {
+            m_changeControl.wait(scopedLock);
+            m_changed = false;
+        }
+    }
+    
+protected:
+        
     /**
      * Gets the value of the sensor.
      *
@@ -58,30 +95,13 @@ public:
         std::lock_guard<std::mutex> scopedLock(m_mutex);
         m_value = value;
     }
-
-    /**
-     * Sets the value of the sensor with a new value if the new value is specified in the JSON
-     * document.
-     * 
-     * @param jsonDocument  Contains new sensor values
-     * 
-     * @return true if the sensor received an update
-     */
-    virtual bool deserialize(const rapidjson::Document& jsonDocument) {
-        // If the document has a value for a sensor with this name and with the
-        // same type as the value, set the new value.
-        std::lock_guard<std::mutex> scopedLock(m_mutex);
-        if ((jsonDocument.HasMember(m_name.c_str())) && (jsonDocument[m_name.c_str()].Is<T>())) {
-            m_value = jsonDocument[m_name.c_str()].Get<T>();
-            return true;
-        }
-        return false;
-    }
-
+    
 private:
-    std::string        m_name;  // Name of the sensor
-    T                  m_value; // Value of the sensor
-    mutable std::mutex m_mutex; // Provides thread-safety for the class
+    std::string                     m_name;             // Name of the sensor
+    T                               m_value;            // Value of the sensor
+    bool                            m_changed;          // Used to report changed value
+    mutable std::mutex              m_mutex;            // Provides thread-safety for the class
+    mutable std::condition_variable m_changeControl;
 };
 
 #endif

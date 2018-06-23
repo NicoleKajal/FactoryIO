@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="97">
+<configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>include/Actuator.hpp</itemPath>
       <itemPath>include/ActuatorSerializer.hpp</itemPath>
+      <itemPath>include/BasicConveyorControl.hpp</itemPath>
+      <itemPath>include/BasicPackingStation.hpp</itemPath>
       <itemPath>include/Communications.hpp</itemPath>
       <itemPath>include/CommunicationsEventHandler.hpp</itemPath>
       <itemPath>include/Factory.hpp</itemPath>
@@ -21,6 +23,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>src/BasicConveyorControl.cpp</itemPath>
+      <itemPath>src/BasicPackingStation.cpp</itemPath>
       <itemPath>src/Communications.cpp</itemPath>
       <itemPath>src/Factory.cpp</itemPath>
       <itemPath>src/Main.cpp</itemPath>
@@ -44,7 +48,7 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>Cygwin64|Cygwin</compilerSet>
+        <compilerSet>Cygwin|Cygwin</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -67,6 +71,10 @@
       </item>
       <item path="include/ActuatorSerializer.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/BasicConveyorControl.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/BasicPackingStation.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/Communications.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/CommunicationsEventHandler.hpp"
@@ -83,6 +91,10 @@
       <item path="include/SensorDeserializer.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Sensors.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/BasicConveyorControl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/BasicPackingStation.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Communications.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -115,6 +127,10 @@
       </item>
       <item path="include/ActuatorSerializer.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/BasicConveyorControl.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/BasicPackingStation.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/Communications.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/CommunicationsEventHandler.hpp"
@@ -131,6 +147,10 @@
       <item path="include/SensorDeserializer.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Sensors.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/BasicConveyorControl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/BasicPackingStation.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Communications.cpp" ex="false" tool="1" flavor2="0">
       </item>

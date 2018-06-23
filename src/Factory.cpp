@@ -34,7 +34,15 @@ Factory::Factory()
 }
 
 bool Factory::start() {
-    return m_communications.openSocket(IP_ADDRESS, TCP_PORT);
+    std::cout << "Waiting for connection to factory..." << std::endl;
+    bool success = m_communications.openSocket(IP_ADDRESS, TCP_PORT);
+    if (success) {
+        std::cout << "Connection established!" << std::endl;
+    }
+    else {
+        std::cerr << "Failed to make connection" << std::endl;
+    }
+    return success;
 }
 
 Factory& Factory::add(ActuatorSerializer* actuatorSerializer) {
@@ -71,6 +79,11 @@ void Factory::handleNewSensorValues(std::string jsonString) {
             m_changeControl.notify_all();
         }
     }
+}
+
+void Factory::loadSensorValues() {
+    m_communications.sendMessage("{\"Send Sensor Data\":true}");
+    waitForSensorChange();
 }
 
 void Factory::waitForSensorChange() {

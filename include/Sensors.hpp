@@ -22,6 +22,34 @@ public:
 };
 
 /**
+ * Generic "Position" sensor, which is used by the pick and place station.
+ */
+class PositionSensor : public Sensor<float> {
+public:
+    PositionSensor(Factory& factory, std::string name)
+    : Sensor(factory, name, false) {
+    }
+
+    inline float getPosition() const {
+        return getValue();
+    }
+};
+
+/**
+ * Generic "Limit" sensor, which is used by the pick and place station.
+ */
+class LimitSensor : public Sensor<bool> {
+public:
+    LimitSensor(Factory& factory, std::string name)
+    : Sensor(factory, name, false) {
+    }
+
+    inline bool atLimit() const {
+        return getValue();
+    }
+};
+
+/**
  * Capacitive Sensor, which is used for close detection of any material. It is equipped with an LED,
  * which indicates the presence of an object within its range.  Details:
  *      LED: green (detecting)

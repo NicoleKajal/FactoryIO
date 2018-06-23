@@ -25,6 +25,7 @@ public:
       bool start();
       void handleNewSensorValues(std::string jsonString);
       void waitForSensorChange();
+      void loadSensorValues();
     
 private:    
 

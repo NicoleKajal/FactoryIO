@@ -6,6 +6,7 @@
 #include "Actuator.hpp"
 #include "Factory.hpp"
 #include "Sensor.hpp"
+#include "Sensors.hpp"
 
 enum Rotation {
     ROTATION_OFF,
@@ -19,65 +20,6 @@ enum Direction {
     DIRECTION_STRAIGHT
 };
 
-class OnOffPart {
-public:
-
-    OnOffPart(Factory& factory, std::string name, bool value)
-    : m_actuator(name, value) {
-        factory.add(&m_actuator);
-    }
-
-    inline bool getOn() const {
-       return m_actuator.getValue();
-    }
-
-    inline void setOn(bool on) {
-        m_actuator.setValue(on);
-    }
-
-private:
-    Actuator<bool> m_actuator;
-};
-
-typedef OnOffPart Emitter;
-
-typedef OnOffPart Remover;
-
-typedef OnOffPart LightIndicator;
-
-typedef OnOffPart WarningLight;
-
-typedef OnOffPart AlarmSiren;
-
-typedef OnOffPart StopBlade;
-
-typedef OnOffPart DigitalRollerConveyor;
-
-class SpeedActuator {
-public:
-
-    SpeedActuator(Factory& factory, std::string name, float value)
-    : m_actuator(name, value) {
-        factory.add(&m_actuator);
-    }
-
-    void setSpeed(float speed) {
-        m_actuator.setValue(speed);
-    }
-private:
-    Actuator<float> m_actuator;
-};
-
-/**
- * Belt Conveyors are used to transport light load cargo.
- * Details:
- *     Required configuration: analog
- *     Available lengths: 2, 4 and 6 m
- *     Max. conveying speed: 3 m/s
- */
-typedef SpeedActuator BeltConveyor;
-
-typedef SpeedActuator RollerConveyor;
 
 /**
  * High speed conveyor scale used for weight control. It measured different weight ranges
@@ -86,6 +28,7 @@ typedef SpeedActuator RollerConveyor;
  *     Max. conveying speed: 0.6 m/s
  *     Capacities: 20 and 100 Kg
  */
+#if 0
 class ConveyorScale {
 public:
     ConveyorScale(Factory& factory, std::string name)
@@ -206,7 +149,7 @@ private:
     Actuator<bool> m_wheelsLeft;
     Actuator<bool> m_wheelsRight;
 };
-
+#endif
 /**
  * Pneumatic pusher sorter equipped with two reed sensors indicating the front and ba
  *     Conveying speed: 2.5 m/s
@@ -221,21 +164,92 @@ private:
 class Pusher {
 public: 
     Pusher(Factory& factory, std::string name)
-    : m_speedActuator(name + " Speed", false), 
-      m_positionSensor(factory, name + " Position", false) {
-        factory.add(&m_speedActuator);
+    : m_speedActuator(factory, name + " Speed", false), 
+      m_positionSensor(factory, name + " Position") {
     }
     
-    void push(float speed) {
-        m_speedActuator.setValue(speed);
+    inline void push(float speed) {
+        m_speedActuator.setSpeed(speed);
     }
- //   float getPosition() {
- //       return m_positionSensor.getValue();
- //   }
+    
+    inline float getPosition() const {
+        return m_positionSensor.getPosition();
+    }
 private:
-    Actuator<float> m_speedActuator;
-    Sensor<float> m_positionSensor;
+    SpeedActuator  m_speedActuator;
+    PositionSensor m_positionSensor;
 };
+
+
+class PickAndPlace {
+public:
+    PickAndPlace(Factory& factory, std::string name)
+    : m_rotateActuator(factory, name + " Rotate", false),
+      m_grabActuator(factory, name + " Grab", false),              
+      m_xPositionActuator(factory, name + " Set X", 0),
+      m_yPositionActuator(factory, name + " Set Y", 0),           
+      m_zPositionActuator(factory, name + " Set Z", 0),         
+      m_xPositionSensor(factory, name + " X"),            
+      m_yPositionSensor(factory, name + " Y"),             
+      m_zPositionSensor(factory, name + " Z"),             
+      m_itemDetectedSensor(factory, name + " Item Detected"),     
+      m_rotateLimitSensor(factory, name + " Rotate Limit") {
+    }
+    
+    inline float getX() const {
+        return m_xPositionSensor.getPosition();
+    }
+    
+    inline void setX(float position) {
+        m_xPositionActuator.setPosition(position);
+    }
+    
+    inline float getY() const {
+        return m_yPositionSensor.getPosition();
+    }
+    
+    inline void setY(float position) {
+        m_yPositionActuator.setPosition(position);
+    }
+
+    inline float getZ() const {
+        return m_zPositionSensor.getPosition();
+    }
+    
+    inline void setZ(float position) {
+        m_zPositionActuator.setPosition(position);
+    }
+    
+    inline void setGrab(bool grab) {
+        m_grabActuator.setOn(grab);
+    }
+
+    inline void setRotate(bool rotate) {
+        m_rotateActuator.setOn(rotate);
+    }
+    
+    inline bool itemDetected() const {
+        return m_itemDetectedSensor.itemDetected();
+    }
+
+    inline bool atRotateLimit() const {
+        return m_rotateLimitSensor.atLimit();
+    }
+    
+private:
+    OnOffActuator      m_rotateActuator; 
+    OnOffActuator      m_grabActuator; 
+    PositionActuator   m_xPositionActuator; 
+    PositionActuator   m_yPositionActuator; 
+    PositionActuator   m_zPositionActuator; 
+    PositionSensor     m_xPositionSensor;
+    PositionSensor     m_yPositionSensor;
+    PositionSensor     m_zPositionSensor;
+    ItemDetectedSensor m_itemDetectedSensor;
+    LimitSensor        m_rotateLimitSensor;
+    
+};
+
 
 /**
  * A device used to consecutively position items at the same place by clamping them. Available in

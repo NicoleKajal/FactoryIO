@@ -11,13 +11,14 @@
 
 #include <stdint.h>
 #include <mutex>
+#include <string>
 #include "Parts.hpp"
 #include "Factory.hpp"
 #include "Sensors.hpp"
 
 class BasicConveyorControl {
 public:
-    BasicConveyorControl(Factory& factory, int32_t maxBoxCount);
+    BasicConveyorControl(Factory& factory, std::string stationPrefix, int32_t maxBoxCount);
     void start();
     void stop();
     void waitUntilDone();

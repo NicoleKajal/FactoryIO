@@ -1,14 +1,14 @@
 #include "BasicConveyorControl.hpp"
 #include <iostream>
 
-BasicConveyorControl::BasicConveyorControl(Factory& factory, int32_t maxBoxCount)
+BasicConveyorControl::BasicConveyorControl(Factory& factory, std::string stationPrefix, int32_t maxBoxCount)
 : m_factory(factory),
-  m_emitter(factory, "Emitter", false),
-  m_remover(factory, "Remover", false),
-  m_entryConveyor(factory, "Entry conveyor", false),
-  m_exitConveyor(factory, "Exit conveyor", false),
-  m_entrySensor(factory, "At entry"),
-  m_exitSensor(factory, "At exit"),
+  m_emitter(factory, stationPrefix + "Emitter", false),
+  m_remover(factory, stationPrefix + "Remover", false),
+  m_entryConveyor(factory, stationPrefix + "Entry conveyor", false),
+  m_exitConveyor(factory, stationPrefix + "Exit conveyor", false),
+  m_entrySensor(factory, stationPrefix + "At entry"),
+  m_exitSensor(factory, stationPrefix + "At exit"),
   m_maxBoxCount(maxBoxCount),
   m_boxCount(0),
   m_entryThread(nullptr),

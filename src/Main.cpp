@@ -5,18 +5,31 @@
  * Created on May 30, 2018, 3:08 PM
  */
 
-#include "Factory.hpp"
-#include "BasicConveyorControl.hpp"
 #include <iostream>
+#include "Factory.hpp"
+#include "BasicPackingStation.hpp"
+#include "BasicConveyorControl.hpp"
+
+void basicConveyorControlDemo() {
+    Factory factory;
+    factory.start();
+    BasicConveyorControl basicConveyorControl1(factory, "Station 1 ", 2);
+    BasicConveyorControl basicConveyorControl2(factory, "Station 2 ", 4);
+    basicConveyorControl1.start();
+    basicConveyorControl2.start();
+    basicConveyorControl1.waitUntilDone();
+    basicConveyorControl2.waitUntilDone();
+}
+
+void basicPackingStationDemo() {
+    Factory factory;
+    factory.start();
+    BasicPackingStation basicPackingStation(factory);
+    basicPackingStation.start();
+    basicPackingStation.waitUntilDone();
+}
 
 int main() {
-    Factory factory;
-    std::cout << "Waiting for connection to factory..." << std::endl;
-    factory.start();
-    std::cout << "Connection established!" << std::endl;
-    BasicConveyorControl basicConveyorControl(factory, 3);
-    basicConveyorControl.start();
-    std::cout << "Starting basic conveyor control" << std::endl;
-    basicConveyorControl.waitUntilDone();
+    basicPackingStationDemo();
     return 0;    
 }    

@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=Cygwin64-Windows
+CND_PLATFORM=Cygwin-Windows
 CND_DLIB_EXT=dll
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/BasicConveyorControl.o \
+	${OBJECTDIR}/src/BasicPackingStation.o \
 	${OBJECTDIR}/src/Communications.o \
 	${OBJECTDIR}/src/Factory.o \
 	${OBJECTDIR}/src/Main.o
@@ -64,17 +66,27 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/factoryio.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/factoryio ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/src/Communications.o: src/Communications.cpp 
+${OBJECTDIR}/src/BasicConveyorControl.o: src/BasicConveyorControl.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BasicConveyorControl.o src/BasicConveyorControl.cpp
+
+${OBJECTDIR}/src/BasicPackingStation.o: src/BasicPackingStation.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BasicPackingStation.o src/BasicPackingStation.cpp
+
+${OBJECTDIR}/src/Communications.o: src/Communications.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Communications.o src/Communications.cpp
 
-${OBJECTDIR}/src/Factory.o: src/Factory.cpp 
+${OBJECTDIR}/src/Factory.o: src/Factory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Factory.o src/Factory.cpp
 
-${OBJECTDIR}/src/Main.o: src/Main.cpp 
+${OBJECTDIR}/src/Main.o: src/Main.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Main.o src/Main.cpp
@@ -85,7 +97,6 @@ ${OBJECTDIR}/src/Main.o: src/Main.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/factoryio.exe
 
 # Subprojects
 .clean-subprojects:

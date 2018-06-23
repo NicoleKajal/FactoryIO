@@ -7,13 +7,13 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=Cygwin64-Windows
-CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin64-Windows
+CND_PLATFORM_Debug=Cygwin-Windows
+CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin-Windows
 CND_ARTIFACT_NAME_Debug=factoryio
-CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin64-Windows/factoryio
-CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin64-Windows/package
+CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/factoryio
+CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin-Windows/package
 CND_PACKAGE_NAME_Debug=factoryio.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin64-Windows/package/factoryio.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/factoryio.tar
 # Release configuration
 CND_PLATFORM_Release=MinGW-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/MinGW-Windows

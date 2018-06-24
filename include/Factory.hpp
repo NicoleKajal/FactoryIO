@@ -22,6 +22,7 @@ public:
       Factory& add(ActuatorSerializer* actuatorSerializer);
       Factory& add(SensorDeserializer* sensorDeserializer);
       void applyChanges();
+      void applyChanges(std::list<ActuatorSerializer*>& actuatorSerializerList);
       bool start();
       void handleNewSensorValues(std::string jsonString);
       void waitForSensorChange();

@@ -4,17 +4,17 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>include/Actuator.hpp</itemPath>
       <itemPath>include/ActuatorSerializer.hpp</itemPath>
+      <itemPath>include/Actuators.hpp</itemPath>
       <itemPath>include/BasicConveyorControl.hpp</itemPath>
-      <itemPath>include/BasicPackingStation.hpp</itemPath>
+      <itemPath>include/BasicPackingFactory.hpp</itemPath>
       <itemPath>include/Communications.hpp</itemPath>
       <itemPath>include/CommunicationsEventHandler.hpp</itemPath>
       <itemPath>include/Factory.hpp</itemPath>
       <itemPath>include/Parts.hpp</itemPath>
-      <itemPath>include/Sensor.hpp</itemPath>
       <itemPath>include/SensorDeserializer.hpp</itemPath>
       <itemPath>include/Sensors.hpp</itemPath>
+      <itemPath>include/Station.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -24,7 +24,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>src/BasicConveyorControl.cpp</itemPath>
-      <itemPath>src/BasicPackingStation.cpp</itemPath>
+      <itemPath>src/BasicPackingFactory.cpp</itemPath>
       <itemPath>src/Communications.cpp</itemPath>
       <itemPath>src/Factory.cpp</itemPath>
       <itemPath>src/Main.cpp</itemPath>
@@ -67,13 +67,13 @@
           <warningLevel>0</warningLevel>
         </ccTool>
       </compileType>
-      <item path="include/Actuator.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/ActuatorSerializer.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Actuators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/BasicConveyorControl.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/BasicPackingStation.hpp" ex="false" tool="3" flavor2="0">
+      <item path="include/BasicPackingFactory.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Communications.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -86,15 +86,15 @@
       </item>
       <item path="include/Parts.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/Sensor.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/SensorDeserializer.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Sensors.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/Station.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/BasicConveyorControl.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/BasicPackingStation.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/BasicPackingFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Communications.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -123,13 +123,13 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="include/Actuator.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/ActuatorSerializer.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Actuators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/BasicConveyorControl.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/BasicPackingStation.hpp" ex="false" tool="3" flavor2="0">
+      <item path="include/BasicPackingFactory.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Communications.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -142,15 +142,15 @@
       </item>
       <item path="include/Parts.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/Sensor.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/SensorDeserializer.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/Sensors.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/Station.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/BasicConveyorControl.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/BasicPackingStation.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/BasicPackingFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Communications.cpp" ex="false" tool="1" flavor2="0">
       </item>

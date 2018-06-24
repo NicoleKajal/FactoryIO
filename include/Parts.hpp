@@ -3,10 +3,9 @@
 #define PARTS_HPP
 
 #include <string>
-#include "Actuator.hpp"
-#include "Factory.hpp"
-#include "Sensor.hpp"
+#include "Station.hpp"
 #include "Sensors.hpp"
+#include "Actuators.hpp"
 
 enum Rotation {
     ROTATION_OFF,
@@ -21,179 +20,19 @@ enum Direction {
 };
 
 
-/**
- * High speed conveyor scale used for weight control. It measured different weight ranges
- * according to the selected configuration.
- * Details:
- *     Max. conveying speed: 0.6 m/s
- *     Capacities: 20 and 100 Kg
- */
-#if 0
-class ConveyorScale {
-public:
-    ConveyorScale(Factory& factory, std::string name)
-    : m_rotateForward(name + " Forward", false), 
-      m_rotateBackward(name + " Backward", false), 
-      m_weightSensor(factory, name + " Weight", 0.0) {
-        factory.add(&m_rotateForward).add(&m_rotateBackward);
-    }
-    
-    void setRotation(Rotation rotation) {
-        switch (rotation) {
-            case ROTATION_FORWARD:
-                m_rotateForward.setValue(true);
-                m_rotateBackward.setValue(false);
-                break;
-            case ROTATION_BACKWARD:
-                m_rotateForward.setValue(false);
-                m_rotateBackward.setValue(true);
-                break;
-            default: 
-                m_rotateForward.setValue(false);
-                m_rotateBackward.setValue(false);
-                break;         
-        }
-    }
-
-//    float getWeight() {
-//        return m_weightSensor.getValue();
-//    }
-private:
-    Actuator<bool> m_rotateForward;
-    Actuator<bool> m_rotateBackward;
-    Sensor<float> m_weightSensor;
-    
-};
-
-/**
- * A 45º power face arm diverter, powered by a gearmotor. Equipped with a belt that helps to
- * deviate the conveyed items onto the next part. The arm can rotate left or right according
- * to the selected configuration.
- * Details:
- *     Belt speed: 2 m/s
- *     Arm angular speed: 5 rad/s
- */
-class PivotArmSorter {
-public:
-    PivotArmSorter(Factory& factory, std::string name)
-    : m_rotateForward(name + " Forward", false), 
-      m_rotateBackward(name + " Backward", false), 
-      m_turn(name + " Turn", false) {
-        factory.add(&m_rotateForward).add(&m_rotateBackward).add(&m_turn);
-    }
-
-    void setRotation(Rotation rotation) {
-        switch (rotation) {
-            case ROTATION_FORWARD:
-                m_rotateForward.setValue(true);
-                m_rotateBackward.setValue(false);
-                break;
-            case ROTATION_BACKWARD:
-                m_rotateForward.setValue(false);
-                m_rotateBackward.setValue(true);
-                break;
-            default: 
-                m_rotateForward.setValue(false);
-                m_rotateBackward.setValue(false);
-                break;         
-        }
-    }
-    
-    void turn(bool on) {
-        m_turn.setValue(on);
-    }
-private:
-    Actuator<bool> m_rotateForward;
-    Actuator<bool> m_rotateBackward;
-    Actuator<bool> m_turn;
-};
-  
-/**
- * A 45º double-sided pop-up wheel sorter used to divert items to three different directions via
- * pivoted rollers.
- * Details:
- *     Wheel radius: 0.05 m
- *     Wheels stroke: 0.003 m
- */
-class PopUpWheelSorter {  
-public:    
-    PopUpWheelSorter(Factory& factory, std::string name)
-    : m_rotateForward(name + " Forward", false), 
-      m_wheelsLeft(name + " Left", false), 
-      m_wheelsRight(name + " Right", false) {
-        factory.add(&m_rotateForward).add(&m_wheelsLeft).add(&m_wheelsRight);
-    }
-    
-    void rotateWheels(bool on){
-        m_rotateForward.setValue(on);
-    }
-        
-    void setDirection(Direction direction) {
-        switch (direction) {
-            case DIRECTION_RIGHT:
-                m_wheelsLeft.setValue(false);
-                m_wheelsRight.setValue(true);
-                break;
-            case DIRECTION_LEFT: 
-                m_wheelsLeft.setValue(true);
-                m_wheelsRight.setValue(false);
-                break;
-            default: 
-                m_wheelsLeft.setValue(false);
-                m_wheelsRight.setValue(false);
-                break;
-        }
-    }
-private:
-    Actuator<bool> m_rotateForward;
-    Actuator<bool> m_wheelsLeft;
-    Actuator<bool> m_wheelsRight;
-};
-#endif
-/**
- * Pneumatic pusher sorter equipped with two reed sensors indicating the front and ba
- *     Conveying speed: 2.5 m/s
- *     Normally centeredck limits.
- * It also includes a servo valve which can be used to set and measure the rod position.
- *   Details:
- *     Required configuration: Analog
- *     Default speed: 1 m/s
- *     Fast speed: 4 m/s
- *     Stroke: 0.9 m
- */
-class Pusher {
-public: 
-    Pusher(Factory& factory, std::string name)
-    : m_speedActuator(factory, name + " Speed", false), 
-      m_positionSensor(factory, name + " Position") {
-    }
-    
-    inline void push(float speed) {
-        m_speedActuator.setSpeed(speed);
-    }
-    
-    inline float getPosition() const {
-        return m_positionSensor.getPosition();
-    }
-private:
-    SpeedActuator  m_speedActuator;
-    PositionSensor m_positionSensor;
-};
-
-
 class PickAndPlace {
 public:
-    PickAndPlace(Factory& factory, std::string name)
-    : m_rotateActuator(factory, name + " Rotate", false),
-      m_grabActuator(factory, name + " Grab", false),              
-      m_xPositionActuator(factory, name + " Set X", 0),
-      m_yPositionActuator(factory, name + " Set Y", 0),           
-      m_zPositionActuator(factory, name + " Set Z", 0),         
-      m_xPositionSensor(factory, name + " X"),            
-      m_yPositionSensor(factory, name + " Y"),             
-      m_zPositionSensor(factory, name + " Z"),             
-      m_itemDetectedSensor(factory, name + " Item Detected"),     
-      m_rotateLimitSensor(factory, name + " Rotate Limit") {
+    PickAndPlace(Station& station, std::string name)
+    : m_rotateActuator(station, name + " Rotate"),
+      m_grabActuator(station, name + " Grab"),              
+      m_xPositionActuator(station, name + " Set X"),
+      m_yPositionActuator(station, name + " Set Y"),           
+      m_zPositionActuator(station, name + " Set Z"),         
+      m_xPositionSensor(station, name + " X"),            
+      m_yPositionSensor(station, name + " Y"),             
+      m_zPositionSensor(station, name + " Z"),             
+      m_itemDetectedSensor(station, name + " Item Detected"),     
+      m_rotateLimitSensor(station, name + " Rotate Limit") {
     }
     
     inline float getX() const {
@@ -247,8 +86,169 @@ private:
     PositionSensor     m_zPositionSensor;
     ItemDetectedSensor m_itemDetectedSensor;
     LimitSensor        m_rotateLimitSensor;
+};
+
+/**
+ * Pneumatic pusher sorter equipped with two reed sensors indicating the front and ba
+ *     Conveying speed: 2.5 m/s
+ *     Normally centeredck limits.
+ * It also includes a servo valve which can be used to set and measure the rod position.
+ *   Details:
+ *     Required configuration: Analog
+ *     Default speed: 1 m/s
+ *     Fast speed: 4 m/s
+ *     Stroke: 0.9 m
+ */
+class Pusher {
+public: 
+    Pusher(Station& station, std::string name)
+    : m_speedActuator(station, name + " Speed"), 
+      m_positionSensor(station, name + " Position") {
+    }
+    
+    inline void push(float speed) {
+        m_speedActuator.setSpeed(speed);
+    }
+    
+    inline float getPosition() const {
+        return m_positionSensor.getPosition();
+    }
+private:
+    SpeedActuator  m_speedActuator;
+    PositionSensor m_positionSensor;
+};
+
+/**
+ * A 45º double-sided pop-up wheel sorter used to divert items to three different directions via
+ * pivoted rollers.
+ * Details:
+ *     Wheel radius: 0.05 m
+ *     Wheels stroke: 0.003 m
+ */
+class PopUpWheelSorter {  
+public:    
+    PopUpWheelSorter(Station& station, std::string name)
+    : m_rotateForward(station, name + " Forward"), 
+      m_wheelsLeft(station, name + " Left"), 
+      m_wheelsRight(station, name + " Right") {
+    }
+    
+    void rotateWheels(bool rotate){
+        m_rotateForward.setOn(rotate);
+    }
+        
+    void setDirection(Direction direction) {
+        switch (direction) {
+            case DIRECTION_RIGHT:
+                m_wheelsLeft.setOn(false);
+                m_wheelsRight.setOn(true);
+                break;
+            case DIRECTION_LEFT: 
+                m_wheelsLeft.setOn(true);
+                m_wheelsRight.setOn(false);
+                break;
+            default: 
+                m_wheelsLeft.setOn(false);
+                m_wheelsRight.setOn(false);
+                break;
+        }
+    }
+private:
+    OnOffActuator m_rotateForward;
+    OnOffActuator m_wheelsLeft;
+    OnOffActuator m_wheelsRight;
+};
+
+/**
+ * High speed conveyor scale used for weight control. It measured different weight ranges
+ * according to the selected configuration.
+ * Details:
+ *     Max. conveying speed: 0.6 m/s
+ *     Capacities: 20 and 100 Kg
+ */
+class ConveyorScale {
+public:
+    ConveyorScale(Station& station, std::string name)
+    : m_rotateForward(station, name + " Forward"), 
+      m_rotateBackward(station, name + " Backward"), 
+      m_weightSensor(station, name + " Weight") {
+    }
+    
+    void setRotation(Rotation rotation) {
+        switch (rotation) {
+            case ROTATION_FORWARD:
+                m_rotateForward.setOn(true);
+                m_rotateBackward.setOn(false);
+                break;
+            case ROTATION_BACKWARD:
+                m_rotateForward.setOn(false);
+                m_rotateBackward.setOn(true);
+                break;
+            default: 
+                m_rotateForward.setOn(false);
+                m_rotateBackward.setOn(false);
+                break;         
+        }
+    }
+
+    float getWeight() {
+        return m_weightSensor.getWeight();
+    }
+private:
+    OnOffActuator   m_rotateForward;
+    OnOffActuator   m_rotateBackward;
+    WeightSensor    m_weightSensor;
     
 };
+
+#if 0
+
+/**
+ * A 45º power face arm diverter, powered by a gearmotor. Equipped with a belt that helps to
+ * deviate the conveyed items onto the next part. The arm can rotate left or right according
+ * to the selected configuration.
+ * Details:
+ *     Belt speed: 2 m/s
+ *     Arm angular speed: 5 rad/s
+ */
+class PivotArmSorter {
+public:
+    PivotArmSorter(Station& station, std::string name)
+    : m_rotateForward(name + " Forward", false), 
+      m_rotateBackward(name + " Backward", false), 
+      m_turn(name + " Turn", false) {
+        station.add(&m_rotateForward).add(&m_rotateBackward).add(&m_turn);
+    }
+
+    void setRotation(Rotation rotation) {
+        switch (rotation) {
+            case ROTATION_FORWARD:
+                m_rotateForward.setValue(true);
+                m_rotateBackward.setValue(false);
+                break;
+            case ROTATION_BACKWARD:
+                m_rotateForward.setValue(false);
+                m_rotateBackward.setValue(true);
+                break;
+            default: 
+                m_rotateForward.setValue(false);
+                m_rotateBackward.setValue(false);
+                break;         
+        }
+    }
+    
+    void turn(bool on) {
+        m_turn.setValue(on);
+    }
+private:
+    Actuator<bool> m_rotateForward;
+    Actuator<bool> m_rotateBackward;
+    Actuator<bool> m_turn;
+};
+  
+#endif
+
+
 
 
 /**
@@ -261,12 +261,12 @@ private:
 #if 0
 class PositioningBar {
 public:
-    PositioningBar(Factory& factory, std::string name)
+    PositioningBar(Station& station, std::string name)
     : m_clampActuator(name + " Clamp", false), 
       m_raiseActuator(name + " Raise", false),
       m_clampSensor(name + " Clamped", false), 
-      m_limitSensor(factory, name + " Limit", false) {
-        factory.add(&m_clampActuator).add(&m_raiseActuator).add(&m_clampSensor);
+      m_limitSensor(station, name + " Limit", false) {
+        station.add(&m_clampActuator).add(&m_raiseActuator).add(&m_clampSensor);
     }
     
     inline void setRaised(bool enabled) {

@@ -1,21 +1,30 @@
 #pragma once
-#ifndef ACTUATOR_HPP
-#define ACTUATOR_HPP
+#ifndef ACTUATORS_HPP
+#define ACTUATORS_HPP
 
 #include <mutex>
 #include <string>
-#include <typeinfo>
 #include "rapidjson/document.h"
-#include "Factory.hpp"
+#include "Station.hpp"
 #include "ActuatorSerializer.hpp"
 
 template<typename T>
 class Actuator : public ActuatorSerializer {
 public:
 
-    Actuator(Factory& factory, std::string name, T value)
-    : m_name(name), m_value(value), m_changed(false), m_mutex() {
-        factory.add(this);
+    /**
+     * Initialize the actuator.
+     * 
+     * @param station   The station that the actuator belongs to
+     * @param name      Name of the actuator
+     * @param value     Value of the actuator
+     * 
+     * The actuator's changed state is initially set to true so that its value will be sent to the
+     * station.
+     */
+    Actuator(Station& station, std::string name, T value)
+    : m_name(name), m_value(value), m_changed(true), m_mutex() {
+        station.add(this);
     }
 
     inline std::string getName() const {
@@ -38,7 +47,7 @@ protected:
         std::lock_guard<std::mutex> scopedLock(m_mutex);
         return m_value;
     }
-
+    
     inline void setValue(T value) {
         std::lock_guard<std::mutex> scopedLock(m_mutex);
         if (value != m_value) {
@@ -56,8 +65,8 @@ private:
 
 class OnOffActuator : public Actuator<bool> {
 public:
-    OnOffActuator(Factory& factory, std::string name, bool value)
-    : Actuator(factory, name, value) {
+    OnOffActuator(Station& station, std::string name)
+    : Actuator(station, name, false) {
     }
 
     inline bool getOn() const {
@@ -72,8 +81,8 @@ public:
 class RaiseLowerActuator : public Actuator<bool> {
 public:
 
-    RaiseLowerActuator(Factory& factory, std::string name, bool value)
-    : Actuator(factory, name, value) {
+    RaiseLowerActuator(Station& station, std::string name)
+    : Actuator(station, name, false) {
     }
 
     inline bool getRaised() const {
@@ -88,8 +97,8 @@ public:
 class PositionActuator : public Actuator<float> {
 public:
 
-    PositionActuator(Factory& factory, std::string name, float value)
-    : Actuator(factory, name, value) {
+    PositionActuator(Station& station, std::string name)
+    : Actuator(station, name, 0) {
     }
 
     inline float getPosition() const {
@@ -104,8 +113,8 @@ public:
 class SpeedActuator : public Actuator<float> {
 public:
 
-    SpeedActuator(Factory& factory, std::string name, float value)
-    : Actuator(factory, name, value) {
+    SpeedActuator(Station& station, std::string name)
+    : Actuator(station, name, 0) {
     }
     inline float getSpeed() const {
        return getValue();
@@ -116,19 +125,20 @@ public:
     }
 };
 
-class DisplayActuator : public Actuator<float> {
+template<typename T>
+class DisplayNumberActuator : public Actuator<T> {
 public:
 
-    DisplayActuator(Factory& factory, std::string name, float value)
-    : Actuator(factory, name, value) {
+    DisplayNumberActuator(Station& station, std::string name)
+    : Actuator<T>(station, name, 0) {
     }
 
-    inline float getNumber() const {
-       return getValue();
+    inline T getNumber() const {
+       return Actuator<T>::getValue();
     }
 
-    inline void setNumber(float on) {
-        setValue(on);
+    inline void setNumber(T number) {
+        Actuator<T>::setValue(number);
     }
 };
 
@@ -151,6 +161,5 @@ typedef OnOffActuator LightIndicator;
 typedef OnOffActuator WarningLight;
 
 typedef OnOffActuator AlarmSiren;
-
 
 #endif

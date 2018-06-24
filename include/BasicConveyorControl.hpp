@@ -15,6 +15,7 @@
 #include "Parts.hpp"
 #include "Factory.hpp"
 #include "Sensors.hpp"
+#include "Station.hpp"
 
 class BasicConveyorControl {
 public:
@@ -28,6 +29,7 @@ private:
     void handleBoxExit();
     
     Factory&              m_factory;
+    Station               m_station;
     Emitter               m_emitter;
     Remover               m_remover;
     DigitalRollerConveyor m_entryConveyor;

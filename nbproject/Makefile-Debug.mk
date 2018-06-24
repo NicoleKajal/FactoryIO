@@ -36,7 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/BasicConveyorControl.o \
-	${OBJECTDIR}/src/BasicPackingStation.o \
+	${OBJECTDIR}/src/BasicPackingFactory.o \
 	${OBJECTDIR}/src/Communications.o \
 	${OBJECTDIR}/src/Factory.o \
 	${OBJECTDIR}/src/Main.o
@@ -71,10 +71,10 @@ ${OBJECTDIR}/src/BasicConveyorControl.o: src/BasicConveyorControl.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BasicConveyorControl.o src/BasicConveyorControl.cpp
 
-${OBJECTDIR}/src/BasicPackingStation.o: src/BasicPackingStation.cpp
+${OBJECTDIR}/src/BasicPackingFactory.o: src/BasicPackingFactory.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BasicPackingStation.o src/BasicPackingStation.cpp
+	$(COMPILE.cc) -g -w -Iinclude -Idependencies/rapidjson/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BasicPackingFactory.o src/BasicPackingFactory.cpp
 
 ${OBJECTDIR}/src/Communications.o: src/Communications.cpp
 	${MKDIR} -p ${OBJECTDIR}/src

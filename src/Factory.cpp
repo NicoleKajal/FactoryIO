@@ -57,6 +57,19 @@ Factory& Factory::add(SensorDeserializer* sensorDeserializer) {
     return *this;
 }
 
+void Factory::applyChanges(std::list<ActuatorSerializer*>& actuatorSerializerList) {
+    rapidjson::Document jsonDocument;
+    jsonDocument.SetObject();
+    for (ActuatorSerializer* actuatorSerializer : actuatorSerializerList)
+        actuatorSerializer->serialize(jsonDocument, true);
+
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    jsonDocument.Accept(writer);
+
+    m_communications.sendMessage(buffer.GetString());
+}
+
 void Factory::applyChanges() {
     std::lock_guard<std::mutex> scopedLock(m_mutex);
     rapidjson::Document jsonDocument;

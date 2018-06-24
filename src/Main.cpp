@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "Factory.hpp"
-#include "BasicPackingStation.hpp"
+#include "BasicPackingFactory.hpp"
 #include "BasicConveyorControl.hpp"
 
 void basicConveyorControlDemo() {
@@ -24,7 +24,7 @@ void basicConveyorControlDemo() {
 void basicPackingStationDemo() {
     Factory factory;
     factory.start();
-    BasicPackingStation basicPackingStation(factory);
+    BasicPackingFactory basicPackingStation(factory);
     basicPackingStation.start();
     basicPackingStation.waitUntilDone();
 }

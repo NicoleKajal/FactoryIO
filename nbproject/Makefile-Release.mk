@@ -39,7 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/BasicPackingFactory.o \
 	${OBJECTDIR}/src/Communications.o \
 	${OBJECTDIR}/src/Factory.o \
-	${OBJECTDIR}/src/Main.o
+	${OBJECTDIR}/src/Main.o \
+	${OBJECTDIR}/src/SortingByWeightFactory.o
 
 
 # C Compiler Flags
@@ -90,6 +91,11 @@ ${OBJECTDIR}/src/Main.o: src/Main.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Main.o src/Main.cpp
+
+${OBJECTDIR}/src/SortingByWeightFactory.o: src/SortingByWeightFactory.cpp
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/SortingByWeightFactory.o src/SortingByWeightFactory.cpp
 
 # Subprojects
 .build-subprojects:

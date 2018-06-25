@@ -9,6 +9,7 @@
 #include "Factory.hpp"
 #include "BasicPackingFactory.hpp"
 #include "BasicConveyorControl.hpp"
+#include "SortingByWeightFactory.hpp"
 
 void basicConveyorControlDemo() {
     Factory factory;
@@ -29,7 +30,14 @@ void basicPackingStationDemo() {
     basicPackingStation.waitUntilDone();
 }
 
+void weightSortingDemo() {
+    Factory factory;
+    factory.start();
+    SortingByWeightFactory sortingByWeightFactory(factory);
+    sortingByWeightFactory.waitUntilDone();
+}
+
 int main() {
-    basicPackingStationDemo();
+    weightSortingDemo();
     return 0;    
 }    

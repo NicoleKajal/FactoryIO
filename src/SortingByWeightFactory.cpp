@@ -16,7 +16,7 @@ SortingByWeightFactory::SortingByWeightFactory(Factory& factory)
   m_popUpWheelSorter(m_station, "Wheel Sorter"),
   m_entrySensor(m_station, "Entry Sensor"),
   m_scaleSensor(m_station, "Scale Sensor"),
-  m_managerThread(new std::thread(SortingByWeightFactory::sortingManager, this)) {
+  m_managerThread(new std::thread(&SortingByWeightFactory::sortingManager, this)) {
 }     
         
 void SortingByWeightFactory::sortingManager() {

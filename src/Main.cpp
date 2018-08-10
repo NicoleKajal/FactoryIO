@@ -36,8 +36,12 @@ void weightSortingDemo() {
     SortingByWeightFactory sortingByWeightFactory(factory);
     sortingByWeightFactory.waitUntilDone();
 }
+#include <iostream>
 
 int main() {
+#ifdef KAJU
+    std::cout << "hey kahu" << std::endl;
+#endif
     weightSortingDemo();
     return 0;    
 }    

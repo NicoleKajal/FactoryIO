@@ -32,9 +32,9 @@ BasicPackingFactory::BasicPackingFactory(Factory& factory)
 
 void BasicPackingFactory::start() {
     m_factory.loadSensorValues();
-    m_palletManagerThread = new std::thread(BasicPackingFactory::palletManager, this);
-    m_boxConveyorManagerThread = new std::thread(BasicPackingFactory::boxConveyorManager, this);
-    m_packingManagerThread = new std::thread(BasicPackingFactory::packingManager, this);
+    m_palletManagerThread = new std::thread(&BasicPackingFactory::palletManager, this);
+    m_boxConveyorManagerThread = new std::thread(&BasicPackingFactory::boxConveyorManager, this);
+    m_packingManagerThread = new std::thread(&BasicPackingFactory::packingManager, this);
 }
 
 class Position {

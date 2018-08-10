@@ -19,8 +19,8 @@ BasicConveyorControl::BasicConveyorControl(Factory& factory, std::string station
 
 void BasicConveyorControl::start() {
     if ((m_entryThread == nullptr) && (m_entryThread == nullptr)) {
-        m_entryThread = new std::thread(BasicConveyorControl::handleBoxEntry, this);
-        m_exitThread = new std::thread(BasicConveyorControl::handleBoxExit, this);
+        m_entryThread = new std::thread(&BasicConveyorControl::handleBoxEntry, this);
+        m_exitThread = new std::thread(&BasicConveyorControl::handleBoxExit, this);
     }
     else {
         std::cerr << "Nice try buddy!" << std::endl;

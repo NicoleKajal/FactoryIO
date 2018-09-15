@@ -30,7 +30,7 @@ public:
     
 private:    
 
-    const std::string IP_ADDRESS = "10.0.0.100";
+    const std::string IP_ADDRESS = "10.0.0.19";
     const uint32_t TCP_PORT = 910;
     
     Communications                  m_communications;

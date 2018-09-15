@@ -14,12 +14,12 @@
 void basicConveyorControlDemo() {
     Factory factory;
     factory.start();
-    BasicConveyorControl basicConveyorControl1(factory, "Station 1 ", 2);
-    BasicConveyorControl basicConveyorControl2(factory, "Station 2 ", 4);
+    BasicConveyorControl basicConveyorControl1(factory, "Station 1 ", 3);
+//    BasicConveyorControl basicConveyorControl2(factory, "Station 2 ", 3);
     basicConveyorControl1.start();
-    basicConveyorControl2.start();
+//    basicConveyorControl2.start();
     basicConveyorControl1.waitUntilDone();
-    basicConveyorControl2.waitUntilDone();
+//    basicConveyorControl2.waitUntilDone();
 }
 
 void basicPackingStationDemo() {
@@ -42,6 +42,6 @@ int main() {
 #ifdef KAJU
     std::cout << "hey kahu" << std::endl;
 #endif
-    weightSortingDemo();
+    basicConveyorControlDemo();
     return 0;    
 }    

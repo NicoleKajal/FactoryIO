@@ -9,6 +9,7 @@
 #define COMMUNICATIONS_HPP
 
 #include <stdint.h>
+#include <mutex>
 #include <string>
 #include <thread>
 #include "CommunicationsEventHandler.hpp"
@@ -22,9 +23,10 @@ public:
 private:
     void receiverThread();
 
-    int32_t m_socketFd;
+    int32_t                     m_socketFd;
     CommunicationsEventHandler* m_eventHandler;
-    std::thread* m_thread;
+    std::thread*                m_thread;
+    std::mutex                  m_mutex;
 };
 
 #endif

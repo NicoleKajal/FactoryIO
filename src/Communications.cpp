@@ -45,6 +45,8 @@ bool Communications::openSocket(string ipAddress, uint32_t port) {
 }
 
 void Communications::sendMessage(std::string text) {
+    std::lock_guard<std::mutex> scopedLock(m_mutex);
+    //std::cout << "Sent: " << text << std::endl;
     text = START_OF_TEXT + text + END_OF_TEXT;
     if (send(m_socketFd, text.c_str(), text.size(), 0) == STATUS_FAILURE) {
         close(m_socketFd);
